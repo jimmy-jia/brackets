@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Research Park Ping Pong Tournament Bracket</title>
+		<meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1" />
+		<meta charset="utf-8">
+		<link href="bracket.css" rel="stylesheet" type="text/css">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+		<script src="https://cdn.firebase.com/js/client/2.1.0/firebase.js"></script>
+		<script src="bracket.js"></script>
+		<script>
+
+			var minimalData = {
+			  "teams": [              // Matchups
+			    ["Team 1", "Team 2"], // First match
+			    ["Team 3", "Team 4"]  // Second match
+			  ],
+			  "results": [            // List of brackets (single elimination, so only one bracket)
+			    [                     // List of rounds in bracket
+			      [                   // First round in this bracket
+			        [1, 2],           // Team 1 vs Team 2
+			        [3, 4]            // Team 3 vs Team 4
+			      ],
+			      [                   // Second (final) round in single elimination bracket
+			        [5, 6],           // Match for first place
+			        [7, 8]            // Match for 3rd place
+			      ]
+			    ]
+			  ]
+			}
+			$(function() {
+			    $('#bracket').bracket({
+			    	init: minimalData, /* data to initialize the bracket with */ 
+			    	save: saveFn,
+			    	userData: "http://myapi"});
+
+				var data = container.bracket('data')
+	    		$('#dataOutput').text(jQuery.toJSON(data))
+			})
+
+			function saveFn(data, userData) {
+			  var json = jQuery.toJSON(data)
+			  $('#saveOutput').text('POST '+userData+' '+json)
+			  /* You probably want to do something like this
+			  jQuery.ajax("rest/"+userData, {contentType: 'application/json',
+			                                dataType: 'json',
+			                                type: 'post',
+			                                data: json})
+			  */
+			}
+			var json = (function() {
+		        var json = null;
+		        $.ajax({
+		            'async': false,
+		            'global': false,
+		            'url': "/data.json",
+		            'dataType': "json",
+		            'success': function (data) {
+		                json = data;
+		            }
+		        });
+		        return json;
+		    })();
+		</script>
+	</head>
+	<body>
+		<h1>Research Park Ping Pong Tournament Bracket</h1>
+			<div id="bracket">
+			</div>
+
+	</body>
+</html>
+
+
+
