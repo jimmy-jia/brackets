@@ -42,8 +42,10 @@
 			  ]
 			}
 			$(function() {
+				console.log(json);
     			$('#bracket').bracket({
-      			init: json /* data to initialize the bracket with */ })
+      			init: json /* data to initialize the bracket with */ 
+      			save: saveFn});
   			})
 			
 		</script>
